@@ -1,4 +1,4 @@
-package es.unex.giiis.asee.retrofit101;
+package es.unex.giiis.asee.executorslab;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+import es.unex.giiis.asee.executorslab.model.Repo;
 
 import java.util.List;
 
@@ -52,8 +53,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.my_text_view, parent, false);
 
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+        return new MyViewHolder(v);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
