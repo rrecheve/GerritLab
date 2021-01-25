@@ -6,12 +6,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import es.unex.giiis.asee.executorslab.model.Repo;
+
+import es.unex.giiis.asee.executorslab.model.Ticket;
 
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private List<Repo> mDataset;
+    private List<Ticket> mDataset;
 
     public interface OnListInteractionListener{
         public void onListInteraction(String url);
@@ -28,7 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public TextView mDateView;
         public View mView;
 
-        public Repo mItem;
+        public Ticket mItem;
 
         public MyViewHolder(View v) {
             super(v);
@@ -40,7 +41,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MyAdapter(List<Repo> myDataset, OnListInteractionListener listener) {
+    public MyAdapter(List<Ticket> myDataset, OnListInteractionListener listener) {
         mDataset = myDataset;
         mListener = listener;
     }
@@ -60,8 +61,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         holder.mItem = mDataset.get(position);
-        holder.mTextView.setText(mDataset.get(position).getName());
-        holder.mDateView.setText(mDataset.get(position).getCreatedAt());
+        holder.mTextView.setText(mDataset.get(position).getNumber().toString());
+        holder.mDateView.setText(mDataset.get(position).getCreated());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +70,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.onListInteraction(holder.mItem.getSvnUrl());
+                    mListener.onListInteraction(holder.mItem.getNumber().toString());
                 }
             }
         });
@@ -79,10 +80,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        if(mDataset!=null) {
+            return mDataset.size();
+        }
+        else return 0;
     }
 
-    public void swap(List<Repo> dataset){
+    public void swap(List<Ticket> dataset){
         mDataset = dataset;
         notifyDataSetChanged();
     }

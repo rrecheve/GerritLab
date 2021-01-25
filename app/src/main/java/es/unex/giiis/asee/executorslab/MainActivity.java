@@ -8,14 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.List;
-
-import es.unex.giiis.asee.executorslab.model.Repo;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements MyAdapter.OnListInteractionListener{
@@ -32,18 +25,17 @@ public class MainActivity extends AppCompatActivity implements MyAdapter.OnListI
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        // Parse json file into JsonReader
-        JsonReader reader = new JsonReader(new InputStreamReader(getResources().openRawResource(R.raw.rrecheve_github_repos)));
-        // Parse JsonReader into list of Repo using Gson
-        List<Repo> repos = Arrays.asList(new Gson().fromJson(reader, Repo[].class));
-        mAdapter = new MyAdapter(repos, this);
+        AppExecutors.getInstance().networkIO().execute(new ReposNetworkLoaderRunnable(
+                repos -> mAdapter.swap(repos)
+        ));
+        mAdapter = new MyAdapter(new ArrayList<>(), this);
         recyclerView.setAdapter(mAdapter);
     }
 
 
     @Override
     public void onListInteraction(String url) {
-        Uri webpage = Uri.parse(url);
+        Uri webpage = Uri.parse("https://git.eclipse.org/r/"+url+"/");
         Intent webIntent = new Intent(Intent.ACTION_VIEW, webpage);
         startActivity(webIntent);
     }
